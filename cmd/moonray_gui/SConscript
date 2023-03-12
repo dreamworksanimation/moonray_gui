@@ -1,0 +1,78 @@
+Import('env')
+from os import path, environ
+
+# ------------------------------------------
+
+old_name = 'raas_gui'
+name = 'moonray_gui'
+sources = env.DWAGlob('*.cc')
+
+def objcopy(source, output):
+    env.Command(output, source, "objcopy --input-target=binary --binary-architecture=i386 --output-target=elf64-x86-64 $SOURCE $TARGET")
+
+# color render transform tables are just
+# large float arrays
+crtFiles = [
+    'data/moonray_rndr_gui_tex_3dlut_post1d.bin',
+    'data/moonray_rndr_gui_tex_3dlut_pre1d.bin',
+    'data/moonray_rndr_gui_tex_3dlut_3d.bin',
+]
+
+crtObjs = []
+for crtFile in crtFiles:
+    # replace .bin with .o, keep in data/ subdir
+    crtObj = env.Dir('data').File(env.subst(''.join((path.splitext(env.File(crtFile).name)[0],
+                                                     '$SHOBJSUFFIX'))))
+    crtObj.attributes.shared = 1
+    crtObjs.append(crtObj)
+    objcopy(crtFile, crtObj)
+
+qt_headers = [    
+    'MainWindow.h',
+    'RenderViewport.h'
+]
+
+for header in qt_headers:
+    sources += env.Moc4(header)
+
+components = [
+    'application',
+    'atomic',
+    'except',
+    'denoiser',
+    'mkl',
+    'oiio',
+    'render_logging',
+    'render_util',
+    'rendering_rndr',
+    'rendering_pbr',
+    'rendering_shading',
+    'scene_rdl2',
+    'QtCore',
+    'QtGui',
+    'QtOpenGL',
+    'gl'
+]
+
+# opencolorio v2 should only be added if >= refplat2021 
+ocio_major_version = environ.get('REZ_OPENCOLORIO_MAJOR_VERSION')
+if ocio_major_version is not None and int(ocio_major_version) >= 2:
+    components.append('OpenColorIO')
+
+incdir     = [str(env.Dir('../../..').srcnode())]
+
+()
+
+env.Replace(QT4_AUTOSCAN=0)
+
+env.DWAUseComponents(components)
+
+if int(environ.get('REZ_QT_MAJOR_VERSION',
+                   env.get('QT_RELEASE', '4').split('.')[0])
+       ) > 4 and 'icc' in env['CC']:
+    env.AppendUnique(CXXFLAGS=['-wd1875'])
+
+prog = env.DWAProgram(name, sources + crtObjs)
+env.DWAInstallBin(prog)
+env.DWAInstallBin(old_name, source=prog)
+
