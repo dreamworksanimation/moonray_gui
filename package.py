@@ -47,10 +47,7 @@ variants = [
     ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'opencolorio-2'],
 ]
 
-conf_rats_variants = [
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2020.3', 'icc-19.0.5.281.x.2'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2020.3', 'icc-19.0.5.281.x.2'],
-]
+conf_rats_variants = variants[0:2]
 
 scons_targets = ['@install'] + unittestflags
 sconsTargets = {
