@@ -40,6 +40,7 @@
 /build/
 /build_env/
 /install/
+/Testing
 *.pyc
 core
 
