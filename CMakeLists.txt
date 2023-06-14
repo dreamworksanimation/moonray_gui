@@ -11,9 +11,13 @@ project(${projectString}
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-message("CMAKE_MODULE_PATH is: ${CMAKE_MODULE_PATH}")
 
 option(MOONRAY_GUI_USE_MKL                      "Whether to link Mkl into moonray_gui executable" NO)
+
+option(ABI_SET_VERSION "Enable the abi-version option" ON)
+if(ABI_SET_VERSION)
+    set(ABI_VERSION "6" CACHE STRING "If ABI_SET_VERSION is on, which version to set")
+endif()
 
 # ================================================
 # Find dependencies
