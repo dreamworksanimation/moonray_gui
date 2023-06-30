@@ -7,6 +7,8 @@ set(CMAKE_AUTOMOC TRUE)
 
 add_executable(${target})
 
+target_compile_definitions(${target} PRIVATE QT_NO_KEYWORDS)
+
 # -----------------------------------------
 # CRT objects
 # color render transform tables are just large float arrays
