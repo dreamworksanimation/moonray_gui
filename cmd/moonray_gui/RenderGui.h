@@ -9,8 +9,6 @@
 #include <mcrt_denoise/denoiser/Denoiser.h>
 #include <moonray/rendering/rndr/rndr.h>
 
-#include <tbb/atomic.h>
-
 #define NUM_TILE_FADE_STEPS  4
 
 namespace moonray_gui {
@@ -119,7 +117,7 @@ private:
     /// The renderering code will strive to render this frame. If it's rendering
     /// a frame with a lower timestamp then we know the frame it's currently
     /// rendering is old.
-    tbb::atomic<uint32_t>   mMasterTimestamp;
+    std::atomic<uint32_t>   mMasterTimestamp;
 
     /// The timestamp of the frame the renderer is currently processing.
     uint32_t                mRenderTimestamp;
