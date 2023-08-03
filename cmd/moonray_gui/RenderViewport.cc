@@ -576,11 +576,17 @@ RenderViewport::keyPressEvent(QKeyEvent *event)
             mNeedsRefresh = true;
         }
 
-        // toggle de(N)oising mode (Optix/OIDN)
+        // toggle de(N)oising mode (Optix or OIDN default/cpu/cuda)
         if (event->key() == Qt::Key_N) {
             if (mDenoiserMode == moonray::denoiser::OPTIX) {
-                std::cout << "Denoiser mode: Open Image Denoise" << std::endl;
+                std::cout << "Denoiser mode: Open Image Denoise (default/best device)" << std::endl;
                 mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE;
+            } else if (mDenoiserMode == moonray::denoiser::OPEN_IMAGE_DENOISE) {
+                std::cout << "Denoiser mode: Open Image Denoise (cpu device)" << std::endl;
+                mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE_CPU;
+            } else if (mDenoiserMode == moonray::denoiser::OPEN_IMAGE_DENOISE_CPU) {
+                std::cout << "Denoiser mode: Open Image Denoise (CUDA device)" << std::endl;
+                mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE_CUDA;
             } else {
                 std::cout << "Denoiser mode: Optix" << std::endl;
                 mDenoiserMode = moonray::denoiser::OPTIX;

@@ -308,31 +308,33 @@ RenderGui::updateFrame(const scene_rdl2::fb_util::RenderBuffer *renderBuffer,
             mDenoisedRenderBuffer.init(w, h);
         }
 
-        if (useAlbedo) {
-            mRenderContext->snapshotAovBuffer(&mAlbedoBuffer, rod->getAovBuffer(albedoIndx), true, false);
+        if (mDenoiser) {
+            if (useAlbedo) {
+                mRenderContext->snapshotAovBuffer(&mAlbedoBuffer, rod->getAovBuffer(albedoIndx), true, false);
+            }
+
+            if (useNormals) {
+                mRenderContext->snapshotAovBuffer(&mNormalBuffer, rod->getAovBuffer(normalIndx), true, false);
+            }
+
+            const scene_rdl2::fb_util::RenderColor *inputBeautyPixels = renderBuffer->getData();
+            const scene_rdl2::fb_util::RenderColor *inputAlbedoPixels = useAlbedo ? mAlbedoBuffer.getData() : nullptr;
+            const scene_rdl2::fb_util::RenderColor *inputNormalPixels = useNormals ? mNormalBuffer.getData() : nullptr;
+            scene_rdl2::fb_util::RenderColor *denoisedPixels = mDenoisedRenderBuffer.getData();
+            std::string errorMsg;
+
+            mDenoiser->denoise(reinterpret_cast<const float*>(inputBeautyPixels),
+                               reinterpret_cast<const float*>(inputAlbedoPixels),
+                               reinterpret_cast<const float*>(inputNormalPixels),
+                               reinterpret_cast<float*>(denoisedPixels),
+                               &errorMsg);
+
+            if (!errorMsg.empty()) {
+                std::cout << "Error denoising: " << errorMsg << std::endl;
+            }
+
+            renderBuffer = &mDenoisedRenderBuffer;
         }
-
-        if (useNormals) {
-            mRenderContext->snapshotAovBuffer(&mNormalBuffer, rod->getAovBuffer(normalIndx), true, false);
-        }
-
-        const scene_rdl2::fb_util::RenderColor *inputBeautyPixels = renderBuffer->getData();
-        const scene_rdl2::fb_util::RenderColor *inputAlbedoPixels = useAlbedo ? mAlbedoBuffer.getData() : nullptr;
-        const scene_rdl2::fb_util::RenderColor *inputNormalPixels = useNormals ? mNormalBuffer.getData() : nullptr;
-        scene_rdl2::fb_util::RenderColor *denoisedPixels = mDenoisedRenderBuffer.getData();
-        std::string errorMsg;
-
-        mDenoiser->denoise(reinterpret_cast<const float*>(inputBeautyPixels),
-                           reinterpret_cast<const float*>(inputAlbedoPixels),
-                           reinterpret_cast<const float*>(inputNormalPixels),
-                           reinterpret_cast<float*>(denoisedPixels),
-                           &errorMsg);
-
-        if (!errorMsg.empty()) {
-            std::cout << "Error denoising: " << errorMsg << std::endl;
-        }
-
-        renderBuffer = &mDenoisedRenderBuffer;
     }
 
     /// -------------------------------- Color Grading -------------------------------------------------
