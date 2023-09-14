@@ -277,9 +277,9 @@ RaasGuiApplication::startRenderThread(void* me)
 
             watchShaderDsos(changeWatcher, *renderContext);
 
-            // Record primary camera location the first time around so that we can maintain
+            // Record camera location the first time around so that we can maintain
             // positioning between dso/shader changes.
-            const rdl2::Camera *camera = renderContext->getCameras()[0];
+            const rdl2::Camera *camera = renderContext->getCamera();
             MNRY_ASSERT(camera);
 
             // Tolerate a double to float precision loss in the gui

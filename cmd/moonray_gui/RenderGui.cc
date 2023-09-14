@@ -712,7 +712,7 @@ RenderGui::updateRealTimeRendering()
 void
 RenderGui::computeCameraMotionXformOffset()
 {
-    const rdl2::Camera* camera = mRenderContext->getCameras()[0];  // primary camera
+    const rdl2::Camera* camera = mRenderContext->getCamera();
     MNRY_ASSERT(camera);
     MNRY_ASSERT(rdl2::Node::sNodeXformKey.isBlurrable());
 
@@ -728,7 +728,7 @@ RenderGui::computeCameraMotionXformOffset()
 void
 RenderGui::setCameraXform(const Mat4f& c2w)
 {
-    rdl2::Camera* camera = const_cast<rdl2::Camera*>(mRenderContext->getCameras()[0]);  // primary camera
+    rdl2::Camera* camera = const_cast<rdl2::Camera*>(mRenderContext->getCamera());
     MNRY_ASSERT(camera);
     MNRY_ASSERT(rdl2::Node::sNodeXformKey.isBlurrable());
 
