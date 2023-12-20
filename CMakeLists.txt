@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 option(MOONRAY_GUI_USE_MKL                      "Whether to link Mkl into moonray_gui executable" NO)
 
-option(ABI_SET_VERSION "Enable the abi-version option" ON)
+option(ABI_SET_VERSION "Enable the abi-version option" OFF)
 if(ABI_SET_VERSION)
     set(ABI_VERSION "6" CACHE STRING "If ABI_SET_VERSION is on, which version to set")
 endif()
