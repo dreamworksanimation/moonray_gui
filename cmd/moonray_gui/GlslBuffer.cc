@@ -48,9 +48,19 @@
 // }
 
 // objcopy generates these symbols
-extern "C" float _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_3d_bin_start;
-extern "C" float _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_post1d_bin_start;
-extern "C" float _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_pre1d_bin_start;
+#if defined(__APPLE__)
+#define _3dlut_3d     _binary_moonray_rndr_gui_tex_3dlut_3d 
+#define _3dlut_post1d _binary_moonray_rndr_gui_tex_3dlut_post1d
+#define _3dlut_pre1d  _binary_moonray_rndr_gui_tex_3dlut_pre1d
+#else
+#define _3dlut_3d     _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_3d_bin_start
+#define _3dlut_post1d _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_post1d_bin_start
+#define _3dlut_pre1d  _binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_pre1d_bin_start
+#endif
+
+extern "C" float _3dlut_3d; 
+extern "C" float _3dlut_post1d;
+extern "C" float _3dlut_pre1d;
 
 namespace {
 // LINEAR RGB32F -> Color render transform -> gamma
@@ -338,7 +348,7 @@ GlslBuffer::makeCrtGammaProgram()
         glBindTexture(GL_TEXTURE_1D, textureID);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        const float *data = &_binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_pre1d_bin_start;
+        const float *data = &_3dlut_pre1d;
         const size_t size = 1024;
         glTexImage1D(GL_TEXTURE_1D, 0, GL_R32F, size, 0, GL_RED, GL_FLOAT, data);
     }
@@ -353,7 +363,7 @@ GlslBuffer::makeCrtGammaProgram()
         glBindTexture(GL_TEXTURE_1D, textureID);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        const float *data = &_binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_post1d_bin_start;
+        const float *data = &_3dlut_post1d;
         const size_t size = 1024;
         glTexImage1D(GL_TEXTURE_1D, 0, GL_R32F, size, 0, GL_RED, GL_FLOAT, data);
     }
@@ -369,7 +379,7 @@ GlslBuffer::makeCrtGammaProgram()
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         const float *data = mLutOverride ? mLutOverride :
-            &_binary_cmd_moonray_gui_data_moonray_rndr_gui_tex_3dlut_3d_bin_start;
+            &_3dlut_3d;
         const size_t size = 64;
         glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB32F, size, size, size, 0, GL_RGB,
                      GL_FLOAT, data);

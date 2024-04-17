@@ -15,6 +15,7 @@ function(${PROJECT_NAME}_cxx_compile_definitions target)
             >
 
         PUBLIC
+            ${GLOBAL_COMPILE_DEFINITIONS}
             GL_GLEXT_PROTOTYPES=1                   # This define makes function symbols to be available as extern declarations.
             TBB_SUPPRESS_DEPRECATED_MESSAGES        # Suppress 'deprecated' messages from TBB
     )

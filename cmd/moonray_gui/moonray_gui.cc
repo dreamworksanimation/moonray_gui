@@ -1,6 +1,10 @@
 // Copyright 2023-2024 DreamWorks Animation LLC
 // SPDX-License-Identifier: Apache-2.0
 
+#include <boost/regex.hpp>
+#include <QtGui>
+#include <QApplication>
+
 #include "RenderGui.h"
 
 #include <moonray/application/ChangeWatcher.h>
@@ -16,10 +20,6 @@
 #include <memory>
 #include <set>
 #include <map>
-
-#include <boost/regex.hpp>
-#include <QtGui>
-#include <QApplication>
 
 namespace moonray_gui {
 
@@ -189,14 +189,14 @@ RaasGuiApplication::startRenderThread(void* me)
 
     try {
         // Create the change watchers if applicable
-        moonray::ChangeWatcher changeWatcher;
-        moonray::ChangeWatcher deltasWatcher;
+        std::unique_ptr<moonray::ChangeWatcher> changeWatcher(moonray::ChangeWatcher::CreateChangeWatcher());
+        std::unique_ptr<moonray::ChangeWatcher> deltasWatcher(moonray::ChangeWatcher::CreateChangeWatcher());
 
         const auto& sceneFiles = self->mOptions.getSceneFiles();
         std::set<std::string> referencedRdlaFiles;
         std::map<std::string, std::string> luaVariables;
         for (const auto& sceneFile : sceneFiles) {
-            changeWatcher.watchFile(sceneFile);
+            changeWatcher->watchFile(sceneFile);
 
             // avoid parsing rdlb files
             if (!isRdla(sceneFile)) continue;
@@ -210,7 +210,7 @@ RaasGuiApplication::startRenderThread(void* me)
 
             // Add referenced rdla files to watch list
             for (const auto& rdlaFile : referencedRdlaFiles) {
-                changeWatcher.watchFile(rdlaFile);
+                changeWatcher->watchFile(rdlaFile);
                 std::cout << "Watching file: " << rdlaFile << std::endl;
             }
 
@@ -219,7 +219,7 @@ RaasGuiApplication::startRenderThread(void* me)
         }
 
         for (const std::string & deltasFile : self->mOptions.getDeltasFiles()) {
-            deltasWatcher.watchFile(deltasFile);
+            deltasWatcher->watchFile(deltasFile);
 
             // Parse deltas file's referenced rdla files
             parseRdlaFileForReferences(
@@ -230,7 +230,7 @@ RaasGuiApplication::startRenderThread(void* me)
 
             // Add delta file's referenced rdla files to watch list
             for (const auto& rdlaFile : referencedRdlaFiles) {
-                changeWatcher.watchFile(rdlaFile);
+                changeWatcher->watchFile(rdlaFile);
             }
 
             referencedRdlaFiles.clear();
@@ -267,7 +267,7 @@ RaasGuiApplication::startRenderThread(void* me)
                             << "ERROR: " << e.what() << std::endl;
                     renderContext.reset();
 
-                    changeWatcher.waitForChange();
+                    changeWatcher->waitForChange();
                 }
             } while(!renderContext);
 
@@ -275,7 +275,7 @@ RaasGuiApplication::startRenderThread(void* me)
 
             // Set up file watchers for all the shader DSOs.
 
-            watchShaderDsos(changeWatcher, *renderContext);
+            watchShaderDsos(*changeWatcher, *renderContext);
 
             // Record camera location the first time around so that we can maintain
             // positioning between dso/shader changes.
@@ -306,7 +306,7 @@ RaasGuiApplication::startRenderThread(void* me)
                 // Execute startFrame() if renderContext has forceCallStartFrame condition
                 renderContext->forceGuiCallStartFrameIfNeed();
 
-                if (deltasWatcher.hasChanged(&changedDeltaFiles)) {
+                if (deltasWatcher->hasChanged(&changedDeltaFiles)) {
                     currCameraXform = self->mRenderGui->endInteractiveRendering();
 
                     // Apply the deltas to the scene objects
@@ -412,7 +412,7 @@ RaasGuiApplication::startRenderThread(void* me)
                 }
 
                 // We're done, exit function.
-                if (changeWatcher.hasChanged()) {
+                if (changeWatcher->hasChanged()) {
 
                     // Grab most recent camera transform.
                     currCameraXform = self->mRenderGui->endInteractiveRendering();

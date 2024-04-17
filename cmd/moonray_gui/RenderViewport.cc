@@ -110,7 +110,11 @@ RenderViewport::RenderViewport(QWidget* parent, CameraType intialType, const cha
     mShowTileProgress(true),
     mApplyColorRenderTransform(false),
     mDenoise(false),
+#ifdef PLATFORM_APPLE
+    mDenoiserMode(moonray::denoiser::METAL),
+#else
     mDenoiserMode(moonray::denoiser::OPTIX),
+#endif
     mDenoisingBufferMode(DN_BUFFERS_BEAUTY),
     mDebugMode(RGB),
     mRenderOutputIndx(0),
@@ -581,6 +585,9 @@ RenderViewport::keyPressEvent(QKeyEvent *event)
             if (mDenoiserMode == moonray::denoiser::OPTIX) {
                 std::cout << "Denoiser mode: Open Image Denoise (default/best device)" << std::endl;
                 mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE;
+            } else if (mDenoiserMode == moonray::denoiser::METAL) {
+                std::cout << "Denoiser mode: Open Image Denoise (Metal device)" << std::endl;
+                mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE_CPU;
             } else if (mDenoiserMode == moonray::denoiser::OPEN_IMAGE_DENOISE) {
                 std::cout << "Denoiser mode: Open Image Denoise (cpu device)" << std::endl;
                 mDenoiserMode = moonray::denoiser::OPEN_IMAGE_DENOISE_CPU;

@@ -20,17 +20,24 @@ set(crtFiles
 set(crtBinDir ${CMAKE_CURRENT_SOURCE_DIR}/data)
 file(RELATIVE_PATH relBinDir ${PROJECT_SOURCE_DIR} ${crtBinDir})
 
+# TODO: actually check that the string produced by xxd matches the expectation. i.e. Test this beyond building it, which works
 # translate ".bin" source files to ".o" files
 foreach(crtFile ${crtFiles})
-    add_custom_command(
-        OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o
-        DEPENDS ${crtBinDir}/${crtFile}.bin
-        COMMAND cd ${PROJECT_SOURCE_DIR} &&
-                    objcopy --input-target=binary --binary-architecture=i386
-                    --output-target=elf64-x86-64
-                    "${relBinDir}/${crtFile}.bin"
-                    "${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o"
-    )
+    if(IsDarwinPlatform)
+        add_custom_command(
+            OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o
+            DEPENDS ${crtBinDir}/${crtFile}.bin
+            COMMAND xxd -i -n _binary_${crtFile} "${crtBinDir}/${crtFile}.bin" "${crtBinDir}/${crtFile}.c" && cc -c "${crtBinDir}/${crtFile}.c" -o "${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o")
+    else()
+        add_custom_command(
+            OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o
+            DEPENDS ${crtBinDir}/${crtFile}.bin
+            COMMAND cd ${PROJECT_SOURCE_DIR} &&
+                        objcopy --input-target=binary --binary-architecture=i386
+                        --output-target=elf64-x86-64
+                        "${relBinDir}/${crtFile}.bin"
+                        "${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o")
+    endif()
     # build a list of the results
     list(APPEND crtObjs ${CMAKE_CURRENT_BINARY_DIR}/${crtFile}.o)
 endforeach()
@@ -51,6 +58,11 @@ target_sources(${target}
         ${crtObjs}
 )
 
+set(atomicLib "")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(atomicLib atomic)
+endif()
+
 target_link_libraries(${target}
     PRIVATE
         Boost::regex
@@ -69,7 +81,7 @@ target_link_libraries(${target}
         Qt5::Core
         Qt5::Gui
         Qt5::OpenGL
-        atomic
+        ${atomicLib}
 )
 
 # Set standard compile/link options

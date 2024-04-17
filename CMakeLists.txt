@@ -3,7 +3,7 @@
 
 cmake_minimum_required (VERSION 3.23.1)
 
-include(packageVersion)  # Sets versionString, projectString and PACKAGE_NAME
+include(OMR_PackageVersion)  # Sets versionString, projectString and PACKAGE_NAME
 project(${projectString}
     VERSION ${versionString}
     LANGUAGES CXX)
@@ -12,7 +12,9 @@ string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
 list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-option(MOONRAY_GUI_USE_MKL                      "Whether to link Mkl into moonray_gui executable" NO)
+include(OMR_Platform)
+
+option(MOONRAY_GUI_USE_MKL "Whether to link Mkl into moonray_gui executable" NO)
 
 option(ABI_SET_VERSION "Enable the abi-version option" OFF)
 if(ABI_SET_VERSION)
@@ -63,12 +65,16 @@ endif()
 # ================================================
 # Set the RPATH for binaries in the install tree
 # ================================================
-if (NOT "" STREQUAL "$ENV{REZ_ICC_ROOT}")
-    set(COMPILER_LIBRARY_DIR "$ENV{REZ_ICC_ROOT}/lib")
+set(CMAKE_INSTALL_RPATH ${GLOBAL_INSTALL_RPATH})
+
+if(NOT IsDarwinPlatform)
+    if (NOT "" STREQUAL "$ENV{REZ_ICC_ROOT}")
+        set(COMPILER_LIBRARY_DIR "$ENV{REZ_ICC_ROOT}/lib")
+    endif()
+
+    set(CMAKE_BUILD_RPATH ${COMPILER_LIBRARY_DIR})
 endif()
 
-set(CMAKE_BUILD_RPATH ${COMPILER_LIBRARY_DIR})
-set(CMAKE_INSTALL_RPATH $ORIGIN $ORIGIN/../lib64 ${COMPILER_LIBRARY_DIR})
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # if OPT_LEVEL is set use its value to override the CMAKE_BUILD_TYPE because the

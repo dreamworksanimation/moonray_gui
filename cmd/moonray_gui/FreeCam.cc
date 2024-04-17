@@ -95,19 +95,19 @@ FreeCam::resetTransform(const Mat4f &xform, bool makeDefault)
 
     mYaw = 0.0f;
     if (viewDir.x * viewDir.x + viewDir.z * viewDir.z > 0.00001f) {
-        mYaw = atan2(-viewDir.x, -viewDir.z);
+        mYaw = scene_rdl2::math::atan2(-viewDir.x, -viewDir.z);
     }
 
     // We aren't extracting the entire range of possible pitches here, just the
     // ones which the freecam can natively handle. Because of this, not all camera
     // orientations are supported.
-    mPitch = asin(viewDir.y);
+    mPitch = scene_rdl2::math::asin(viewDir.y);
 
     // Compute a matrix which only contains the roll so we can extract it out.
     Mat4f noRoll = makeMatrix(mYaw, mPitch, 0.0f, Vec3f(0.0f, 0.0f, 0.0f));
     Mat4f rollOnly = xform * noRoll.transposed();
     Vec3f xAxis = normalize(asVec3(rollOnly.row0()));
-    mRoll = atan2(xAxis.y, xAxis.x);
+    mRoll = scene_rdl2::math::atan2(xAxis.y, xAxis.x);
 
     mInputState = 0;
     mMouseMode = NONE; 

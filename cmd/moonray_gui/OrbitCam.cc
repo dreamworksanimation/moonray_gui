@@ -148,7 +148,7 @@ struct Camera {
     void dolly (float ds)
     {
         float dollySpeed = 0.005f;
-        float k = pow((1.0f-dollySpeed), ds);
+        float k = scene_rdl2::math::pow((1.0f-dollySpeed), ds);
         Vec3f focusPoint = position + viewDir * focusDistance;
         position += focusDistance * (1-k) * viewDir;
         focusDistance = length(focusPoint - position);
