@@ -1,52 +1,62 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Src_project stuff
-.src_mtime*
-/.config.xml
-/.metadata_*
-
-# Build stuff
-/build/
-/build_env/
-/install/
-/Testing
-*.pyc
-core
-
-# Bart stuff
-/SConstruct
-/site_scons
-
-Editor stuff
 *~
+*.os
+*.pyc
+*.pydevproject
+*.project
+*.cproject
+*.settings
+*.autotools
+.*.swp
+Makefile
+CMakeFiles
+CMakeCache.txt
+cppcheck_results.xml
+install_manifest.txt
+*.ui.h
+*.cxx
+.gdb_history
+*.vcxproj*
+*.sln
+*.db
+*.vs
+Win32
+Win64
+*.dir
+*.suo
+*.sdf
+*.opendb
+x64
+Testing
+renderdev/Dockerfile.out
+
+
+cmd/client_apps/Android/gen/
+cmd/client_apps/Android/bin/
+
+*.old
+*.bak
+*.classpath
+*target/
+
+# ignore build/install/build_env dirs
+/build
+/build_env
+/install
+/Testing
+html
+latex
+Doxyfile
+
+/.config.xml
+/.metadata_src_project
+/.src_project*
+
+profiling/build/
+profiling/latest_results/
+profiling/profile_reports/
+profiling/profiles/
+
+/SConstruct
+/boot
+/site_scons
+/bamboo_tools
