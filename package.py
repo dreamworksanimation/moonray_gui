@@ -53,7 +53,7 @@ requires = [
 ]
 
 private_build_requires = [
-    'cmake_modules',
+    'cmake_modules-1.0',
     'cppunit',
 ]
 
