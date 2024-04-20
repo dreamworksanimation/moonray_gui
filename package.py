@@ -14,7 +14,7 @@ def version():
     """
     Increment the build in the version.
     """
-    _version = '16.1'
+    _version = '16.2'
     from rezbuild import earlybind
     return earlybind.version(this, _version)
 
@@ -47,8 +47,8 @@ conf_CI_variants = list(filter(lambda v: 'os-CentOS-7' in v, variants))
 
 requires = [
     'mkl',
-    'moonray-16.1',
-    'mcrt_denoise-5.0',
+    'moonray-16.2',
+    'mcrt_denoise-5.1',
     'qt',
 ]
 
