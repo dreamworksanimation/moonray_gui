@@ -68,10 +68,6 @@ endif()
 set(CMAKE_INSTALL_RPATH ${GLOBAL_INSTALL_RPATH})
 
 if(NOT IsDarwinPlatform)
-    if (NOT "" STREQUAL "$ENV{REZ_ICC_ROOT}")
-        set(COMPILER_LIBRARY_DIR "$ENV{REZ_ICC_ROOT}/lib")
-    endif()
-
     set(CMAKE_BUILD_RPATH ${COMPILER_LIBRARY_DIR})
 endif()
 
