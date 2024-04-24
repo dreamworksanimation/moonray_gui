@@ -62,9 +62,7 @@ if(${OpenColorIO_FOUND})
     endif()
 endif()
 
-# ================================================
 # Set the RPATH for binaries in the install tree
-# ================================================
 set(CMAKE_INSTALL_RPATH ${GLOBAL_INSTALL_RPATH})
 
 if(NOT IsDarwinPlatform)
