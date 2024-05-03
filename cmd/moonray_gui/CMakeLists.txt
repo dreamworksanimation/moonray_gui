@@ -58,9 +58,8 @@ target_sources(${target}
         ${crtObjs}
 )
 
-set(atomicLib "")
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(atomicLib atomic)
+if (NOT IsDarwinPlatform)
+    set(PlatformSpecificLibs atomic)
 endif()
 
 target_link_libraries(${target}
@@ -81,7 +80,7 @@ target_link_libraries(${target}
         Qt5::Core
         Qt5::Gui
         Qt5::OpenGL
-        ${atomicLib}
+        ${PlatformSpecificLibs}
 )
 
 # Set standard compile/link options
