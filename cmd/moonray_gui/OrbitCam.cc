@@ -76,7 +76,7 @@ struct Camera {
             static_cast<float>(vz.z), position.x, position.y, position.z);
     }
 
-    Xform3f world2camera () const { return rcp(camera2world());}
+    Xform3f world2camera () const { return camera2world().inverse();}
 
     Vec3f world2camera(const Vec3f& p) const { return transformPoint(world2camera(),p);}
     Vec3f camera2world(const Vec3f& p) const { return transformPoint(camera2world(),p);}
