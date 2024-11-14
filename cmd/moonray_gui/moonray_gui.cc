@@ -383,7 +383,7 @@ RaasGuiApplication::startRenderThread(void* me)
                         // need to snapshot all the required buffers, the
                         // render buffer might not have been snapshot at all if
                         // displaying alternate render outputs
-                        renderContext->snapshotRenderBuffer(&outputBuffer, true, true);
+                        renderContext->snapshotRenderBuffer(&outputBuffer, true, true, true);
 
                         const std::string outputFilename = renderContext->getSceneContext().getSceneVariables().get(rdl2::SceneVariables::sOutputFile);
                         const rdl2::SceneObject *metadata = renderContext->getSceneContext().getSceneVariables().getExrHeaderAttributes();

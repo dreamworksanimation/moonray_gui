@@ -432,7 +432,7 @@ RenderGui::snapshotFrame(scene_rdl2::fb_util::RenderBuffer *renderBuffer,
 
     if (mRenderOutput < 0) {
         // snapshot the plain old render buffer output
-        mRenderContext->snapshotRenderBuffer(renderBuffer, untile, parallel);
+        mRenderContext->snapshotRenderBuffer(renderBuffer, untile, parallel, true);
         return;
     }
 
@@ -451,7 +451,7 @@ RenderGui::snapshotFrame(scene_rdl2::fb_util::RenderBuffer *renderBuffer,
     MNRY_ASSERT(mRenderOutput < static_cast<int>(rod->getNumberOfRenderOutputs()));
 
     if (rod->requiresRenderBuffer(mRenderOutput)) {
-        mRenderContext->snapshotRenderBuffer(renderBuffer, untile, parallel);
+        mRenderContext->snapshotRenderBuffer(renderBuffer, untile, parallel, /* usePrimaryAov */ true);
     }
     if (rod->requiresHeatMap(mRenderOutput)) {
         mRenderContext->snapshotHeatMapBuffer(heatMapBuffer, untile, parallel);
@@ -463,8 +463,10 @@ RenderGui::snapshotFrame(scene_rdl2::fb_util::RenderBuffer *renderBuffer,
         mRenderContext->snapshotRenderBufferOdd(renderBufferOdd, untile, parallel);
     }
 
+    scene_rdl2::fb_util::RenderBuffer beautyBuffer;
+    mRenderContext->snapshotRenderBuffer(&beautyBuffer, untile, parallel, /* usePrimaryAov */ false);
     mRenderContext->snapshotRenderOutput(renderOutputBuffer, mRenderOutput,
-                                         renderBuffer, heatMapBuffer, weightBuffer, renderBufferOdd,
+                                         renderBuffer, &beautyBuffer, heatMapBuffer, weightBuffer, renderBufferOdd,
                                          untile, parallel);
 }
 
@@ -539,10 +541,13 @@ RenderGui::updateProgressiveRendering()
 
     RenderViewport* renderVp = MNRY_VERIFY(mMainWindow->getRenderViewport());
 
+    // RenderOutputDriver must exist to render a frame
+    const auto *rod = mRenderContext->getRenderOutputDriver();
+
     // This block of code won't get executed on the first iteration after
     // beginInteractiveRendering is called but will be for all subsequent 
     // iterations.
-    if (mRenderContext->isFrameRendering() || mRenderContext->isFrameComplete()) {
+    if (mRenderContext->isFrameRendering() || mRenderContext->isFrameComplete() && rod) {
 
         // Throttle rendering to the specified frames per second.
         float fps = mRenderContext->getSceneContext().getSceneVariables().get(rdl2::SceneVariables::sFpsKey);

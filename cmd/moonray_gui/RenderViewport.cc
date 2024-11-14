@@ -479,7 +479,7 @@ RenderViewport::keyPressEvent(QKeyEvent *event)
             const rdl2::SceneObject *metadata = mRenderContext->getSceneContext().getSceneVariables().getExrHeaderAttributes();
             const math::HalfOpenViewport aperture = mRenderContext->getRezedApertureWindow();
             const math::HalfOpenViewport region = mRenderContext->getRezedRegionWindow();
-            mRenderContext->snapshotRenderBuffer(&outputBuffer, true, true);
+            mRenderContext->snapshotRenderBuffer(&outputBuffer, true, true, true);
             try {
                 moonray::rndr::writePixelBuffer(outputBuffer, mSnapshotPath + outputFilename, metadata, aperture, region);
                 std::cout << "Snapshot " << outputFilename << " taken and saved to " << mSnapshotPath << std::endl;
