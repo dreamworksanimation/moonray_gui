@@ -9,6 +9,7 @@
 
 #include <moonray/rendering/rndr/RenderOutputDriver.h>
 #include <moonray/rendering/rndr/RenderStatistics.h>
+#include <moonray/rendering/rndr/RenderContextConsoleDriver.h>
 #include <scene_rdl2/common/fb_util/PixelBufferUtilsGamma8bit.h>
 #include <scene_rdl2/common/math/MathUtil.h>
 #include <scene_rdl2/common/platform/Platform.h>
@@ -235,6 +236,9 @@ RenderGui::RenderGui(CameraType initialCamType,
     mHandler->mIsActive = true;
     mMasterTimestamp = 1;
     mColorManager.setupConfig();
+
+    mShmFbOutput = std::make_shared<scene_rdl2::grid_util::ShmFbOutput>();
+    moonray::rndr::RenderContextConsoleDriver::setShmFbOutput(mShmFbOutput);
 }
 
 
@@ -400,6 +404,14 @@ RenderGui::updateFrame(const scene_rdl2::fb_util::RenderBuffer *renderBuffer,
                            &mDisplayBuffer, 
                            options, 
                            parallel);
+
+
+    if (mShmFbOutput && mShmFbOutput->getActive()) {
+        mShmFbOutput->updateFbRGB888(mDisplayBuffer.getWidth(),
+                                     mDisplayBuffer.getHeight(),
+                                     static_cast<const void* const>(mDisplayBuffer.getData()),
+                                     false /* top2BottomFlag */ );
+    }
 
     if (showProgress) {
         showTileProgress(DISPLAY_BUFFER_IS_DISPLAY_BUFFER);

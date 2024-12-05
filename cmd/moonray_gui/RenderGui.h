@@ -8,6 +8,7 @@
 
 #include <mcrt_denoise/denoiser/Denoiser.h>
 #include <moonray/rendering/rndr/rndr.h>
+#include <scene_rdl2/common/grid_util/ShmFbOutput.h>
 
 #include <tbb/atomic.h>
 
@@ -173,6 +174,8 @@ private:
 
     /// Color Manager
     ColorManager mColorManager;
+
+    std::shared_ptr<scene_rdl2::grid_util::ShmFbOutput> mShmFbOutput;
 };
 
 } // namespace moonray_gui
