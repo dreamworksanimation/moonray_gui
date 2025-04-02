@@ -29,19 +29,14 @@ help = ('For assistance, '
         "please contact the folio's owner at: moonbase-dev@dreamworks.com")
 
 variants = [
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'gcc-11.x', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.1', 'gcc-11.x', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'clang-17.0.6.x', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2023.1', 'clang-17.0.6.x', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-rocky-9', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2021.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2021.0', 'clang-13', 'opencolorio-2'],
-    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'opencolorio-2'],
-    ['os-CentOS-7', 'opt_level-debug', 'refplat-vfx2022.0', 'gcc-9.3.x.1', 'opencolorio-2'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'gcc-11.x'],
+    ['os-rocky-9', 'opt_level-debug',    'refplat-vfx2023.1', 'gcc-11.x'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2023.1', 'clang-17.0.6.x'],
+    ['os-rocky-9', 'opt_level-debug',    'refplat-vfx2023.1', 'clang-17.0.6.x'],
+    ['os-rocky-9', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1'],
+
+    ['os-CentOS-7', 'opt_level-optdebug', 'refplat-vfx2022.0', 'gcc-9.3.x.1'],
+    ['os-CentOS-7', 'opt_level-debug',    'refplat-vfx2022.0', 'gcc-9.3.x.1'],
 ]
 
 conf_rats_variants = variants[0:2]
@@ -51,6 +46,7 @@ requires = [
     'mkl',
     'moonray-17.8',
     'mcrt_denoise-6.5',
+    'opencolorio-2',
     'qt',
 ]
 
