@@ -89,11 +89,10 @@ MoonrayGui_cxx_compile_features(${target})
 MoonrayGui_cxx_compile_options(${target})
 MoonrayGui_link_options(${target})
 
-# Disable OCIO if < v2
-if (NOT DEFINED ENV{REZ_OPENCOLORIO_MAJOR_VERSION} OR ENV{REZ_OPENCOLORIO_MAJOR_VERSION} VERSION_LESS "2.0.0.0")
+# Disable OCIO if not found
+if (NOT OpenColorIO_FOUND)
     target_compile_definitions(${target} PRIVATE DISABLE_OCIO)
 endif()
 
 install(TARGETS ${target}
     RUNTIME DESTINATION bin)
-
