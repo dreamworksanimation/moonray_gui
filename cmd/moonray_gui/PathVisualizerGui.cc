@@ -338,7 +338,7 @@ PathVisualizerGui::slot_togglePathVisualizer()
         // to "Turn on", and refresh the frame
         mPathVisualizerManager->turnOff();
         mOnBtn->setText("Turn On");
-        emit sig_styleParamChanged();
+        Q_EMIT sig_styleParamChanged();
     } else {
         // If the visualizer is off, turn it on, start the visualization
         // process, and set the button text to "Turn off"
@@ -483,49 +483,49 @@ PathVisualizerGui::slot_setLineWidth(const int value)
 {
     mPathVisualizerManager->setLineWidth(static_cast<float>(value));
     mLineWidthValue->setText(QString::number(value));
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setCameraRayColor(const QColor& color)
 {
     mPathVisualizerManager->setCameraRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setIndirectDiffuseRayColor(const QColor& color)
 {
     mPathVisualizerManager->setIndirectDiffuseRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setIndirectSpecularRayColor(const QColor& color)
 {
     mPathVisualizerManager->setIndirectSpecularRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setDirectDiffuseRayColor(const QColor& color)
 {
     mPathVisualizerManager->setDirectDiffuseRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setDirectSpecularRayColor(const QColor& color)
 {
     mPathVisualizerManager->setDirectSpecularRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 void
 PathVisualizerGui::slot_setDirectLightRayColor(const QColor& color)
 {
     mPathVisualizerManager->setDirectLightRayColor(convertFromQColor(color)); 
-    emit sig_styleParamChanged();
+    Q_EMIT sig_styleParamChanged();
 }
 
 }

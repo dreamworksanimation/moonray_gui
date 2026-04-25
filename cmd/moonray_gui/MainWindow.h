@@ -4,7 +4,6 @@
 #pragma once
 
 #include "GuiTypes.h"
-#include "QtQuirks.h"
 
 #include <QLabel>
 #include <QMainWindow>
@@ -44,9 +43,9 @@ private:
     QTimer* mTimer;
 
     
-public slots:
+public Q_SLOTS:
     void hideTextOverlay();
-signals:
+Q_SIGNALS:
     void sig_hideRecordingOverlay();
 };
 

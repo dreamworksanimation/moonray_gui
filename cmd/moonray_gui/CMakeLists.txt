@@ -103,5 +103,8 @@ if (NOT OpenColorIO_FOUND)
     target_compile_definitions(${target} PRIVATE DISABLE_OCIO)
 endif()
 
+# Class of "emit" from QT and TBB collide
+target_compile_definitions(${target} PRIVATE QT_NO_KEYWORDS)
+
 install(TARGETS ${target}
     RUNTIME DESTINATION bin)

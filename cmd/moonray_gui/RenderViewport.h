@@ -4,7 +4,6 @@
 #pragma once
 
 #ifndef Q_MOC_RUN
-#include "QtQuirks.h"
 #include "FrameUpdateEvent.h"
 #include "FreeCam.h"
 #include "GlslBuffer.h"
@@ -83,10 +82,10 @@ public:
     
     static const char* mHelp;
 
-public slots:
+public Q_SLOTS:
     void slot_forceFrameRedraw();
 
-signals:
+Q_SIGNALS:
     void sig_pixelSelected(int x, int y);
 
 protected:
