@@ -11,3 +11,5 @@ moonray_gui_v2 is a command-line imgui application that is intended to replace t
 WARNING: After cloning this project, you must run `git submodule --init --recursive` in order to initialize and update the imgui submodule. 
 
 To run, simply use `moonray_gui_v2` instead of `moonray_gui`.
+
+Policies concerning [Governance](https://github.com/OpenMoonRay/openmoonray/blob/main/GOVERNANCE.md), [Code of Conduct](https://github.com/OpenMoonRay/openmoonray/blob/main/CODE_OF_CONDUCT.md), [Contribution](https://github.com/OpenMoonRay/openmoonray/blob/main/CONTRIBUTING.md), and the list of [Maintainers](https://github.com/OpenMoonRay/openmoonray/blob/main/MAINTAINERS.md) are available in the OpenMoonRay super project.
