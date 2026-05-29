@@ -70,7 +70,7 @@ target_sources(${target}
 target_include_directories(${target} PRIVATE ${imgui_SOURCE_DIR})
 
 if (NOT IsDarwinPlatform)
-    set(PlatformSpecificLibs atomic)
+    set(PlatformSpecificLibs atomic dl)
 endif()
 
 target_link_libraries(${target}
