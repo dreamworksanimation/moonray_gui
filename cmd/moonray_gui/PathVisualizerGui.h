@@ -26,7 +26,7 @@ public:
 
     ~PathVisualizerGui();
 
-public slots:
+public Q_SLOTS:
 
     void slot_togglePathVisualizer();
 
@@ -58,7 +58,7 @@ public slots:
     void slot_setDirectSpecularRayColor(const QColor& color);
     void slot_setDirectLightRayColor(const QColor& color);
 
-signals:
+Q_SIGNALS:
     void sig_styleParamChanged();
 
 private:

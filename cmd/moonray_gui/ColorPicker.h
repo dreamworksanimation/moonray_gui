@@ -30,10 +30,10 @@ private:
     QColorDialog* mColorDialog;
     QPushButton* mSelector;
     
-signals:
+Q_SIGNALS:
     void sig_colorChanged(const QColor& color);
 
-public slots:
+public Q_SLOTS:
     void slot_changeColor(const QColor& color);
     void slot_openColorDialog();
 };

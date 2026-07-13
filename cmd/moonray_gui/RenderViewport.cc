@@ -779,7 +779,7 @@ RenderViewport::mousePressEvent(QMouseEvent *event)
         const int finalY = y + static_cast<int>(heightDiscrepancy*0.5f);
 
         if (x >= 0 && x < mWidth && finalY >= 0 && finalY < mHeight) {
-            emit sig_pixelSelected(x, finalY);
+            Q_EMIT sig_pixelSelected(x, finalY);
         }
     }
 }

@@ -55,7 +55,7 @@ void ColorPicker::slot_changeColor(const QColor& color)
                                                                                  .arg(mColor.blue());
     mSelector->setStyleSheet(style);
 
-    emit sig_colorChanged(mColor);
+    Q_EMIT sig_colorChanged(mColor);
 }
 
 }
